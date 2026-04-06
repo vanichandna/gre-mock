@@ -311,14 +311,20 @@
             q.options.forEach(opt => {
                 const label = document.createElement('label');
                 label.className = 'option-label';
+                
                 const radio = document.createElement('input');
                 radio.type = 'radio';
                 radio.name = `q${currentIndex}`;
                 radio.value = opt;
                 if (userAnswers[currentIndex] === opt) radio.checked = true;
-                radio.onchange = (e) => userAnswers[currentIndex] = e.target.value;
+                
+                // Save the answer to state when clicked
+                radio.onchange = (e) => {
+                    userAnswers[currentIndex] = e.target.value;
+                };
+                
                 label.appendChild(radio);
-                label.innerHTML += opt; // appending text
+                label.appendChild(document.createTextNode(opt)); // THIS is the fix!
                 inputsEl.appendChild(label);
             });
         } else if (q.type === 'numeric') {
