@@ -2,35 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>GRE Quant: Imperial College Simulator</title>
+    <title>GRE Full 27-Question Adaptive Mock</title>
     <style>
         :root { --gre-blue: #1e3a8a; --gre-yellow: #facc15; --gre-bg: #d1d5db; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--gre-bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { background: white; width: 100%; max-width: 950px; border: 2px solid #374151; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; min-height: 680px; }
-        
-        /* Header & Timer */
+        .container { background: white; width: 100%; max-width: 1000px; border: 2px solid #374151; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; min-height: 750px; }
         .header { background: var(--gre-blue); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--gre-yellow); }
         .timer { font-family: monospace; font-size: 1.5rem; background: black; color: #10b981; padding: 5px 15px; border-radius: 4px; border: 1px solid #374151;}
-        
-        /* Navigation Toolbar */
         .toolbar { background: #e5e7eb; padding: 10px 20px; display: flex; justify-content: space-between; border-bottom: 1px solid #9ca3af; }
-        
-        /* Content Areas */
-        .content { padding: 40px; flex-grow: 1; overflow-y: auto; }
+        .content { padding: 40px; flex-grow: 1; overflow-y: auto; max-height: 550px; }
         .prompt { font-size: 1.25rem; margin-bottom: 30px; line-height: 1.6; }
         .option-label { display: block; padding: 15px; margin-bottom: 12px; border: 1px solid #d1d5db; cursor: pointer; transition: 0.2s; }
         .option-label:hover { background: #f0f9ff; border-color: var(--gre-blue); }
         .numeric-input { padding: 12px; font-size: 1.2rem; border: 2px solid #9ca3af; width: 180px; }
-        
-        /* Buttons */
         .footer { background: #f3f4f6; padding: 20px; display: flex; justify-content: space-between; border-top: 2px solid #9ca3af; }
         button { padding: 12px 24px; font-size: 1rem; font-weight: bold; cursor: pointer; border: 1px solid #374151; background: #fff; }
         .btn-primary { background: var(--gre-blue); color: white; border: none; }
-        .btn-mark.active { background: var(--gre-yellow); }
-
-        /* Review & Transition */
         #review-screen, #results-screen, #transition-screen { display: none; text-align: center; padding: 40px; }
-        .review-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 30px; }
+        .review-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 30px; }
         .result-card { text-align: left; background: #f9fafb; padding: 20px; margin-bottom: 15px; border-left: 6px solid #d1d5db; }
         .correct { border-color: #10b981; background: #f0fdf4; }
         .incorrect { border-color: #ef4444; background: #fef2f2; }
@@ -45,32 +34,32 @@
     </div>
     
     <div class="toolbar" id="toolbar">
-        <button class="btn-mark" id="mark-btn" onclick="toggleMark()">⚐ Mark for Review</button>
+        <button id="mark-btn" onclick="toggleMark()">⚐ Mark</button>
         <button class="btn-primary" onclick="showReview()">Review Screen</button>
     </div>
 
     <div id="question-screen" class="content">
-        <div style="font-weight: bold; color: var(--gre-blue); margin-bottom: 10px;" id="q-meta">Question 1 of 12</div>
+        <div style="font-weight: bold; color: var(--gre-blue); margin-bottom: 10px;" id="q-meta"></div>
         <div class="prompt" id="q-prompt"></div>
         <div id="q-inputs"></div>
     </div>
 
     <div id="review-screen" class="content">
-        <h2>Review Section Content</h2>
+        <h2>Section Review</h2>
         <div class="review-grid" id="review-list"></div>
-        <button onclick="closeReview()">Back to Question</button>
+        <button onclick="closeReview()">Back</button>
         <button class="btn-primary" onclick="exitSection()">Exit Section</button>
     </div>
 
     <div id="transition-screen" class="content">
         <h1 style="color: var(--gre-blue);">Section 1 Complete</h1>
-        <p>The system is preparing your adaptive Section 2 based on your accuracy.</p>
+        <p>Take a 1-minute breather. Ready for the final 15 questions?</p>
         <button class="btn-primary" style="padding: 20px 40px;" onclick="startSection2()">Begin Section 2 (26 Minutes)</button>
     </div>
 
     <div id="results-screen" class="content">
         <h1 style="color: var(--gre-blue);">Scaled Score: <span id="scaled-score">--</span></h1>
-        <p id="score-stats" style="font-weight: bold;"></p>
+        <p id="score-stats"></p>
         <div id="detailed-results"></div>
     </div>
 
@@ -81,34 +70,42 @@
 </div>
 
 <script>
-    // --- FULL ADAPTIVE DATA ---
-    const section1 = [
-        { type: "qc", prompt: "x is an integer and x² = 16.<br><br><b>Quantity A:</b> x + 4<br><b>Quantity B:</b> 0", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "Cannot determine" },
-        { type: "mcq", prompt: "If a rectangle's length is increased by 20% and width is decreased by 20%, what is the percent change in area?", options: ["0%", "4% increase", "4% decrease", "40% increase"], correct: "4% decrease" },
-        { type: "qc", prompt: "k is a prime number and 10 < k < 20.<br><br><b>Quantity A:</b> Number of possible values for k<br><b>Quantity B:</b> 4", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "Quantity B is greater" },
-        { type: "numeric", prompt: "If 3x + 12 = 5x - 4, find the value of x.", correct: "8" },
-        { type: "mcq", prompt: "A bag has 3 red, 4 blue, and 5 green marbles. If one is picked at random, what is the probability it is NOT red?", options: ["1/4", "3/4", "1/3", "2/3"], correct: "3/4" },
-        { type: "qc", prompt: "<b>Quantity A:</b> 2¹⁰<br><b>Quantity B:</b> 10²", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "A is greater" },
-        { type: "numeric", prompt: "The average of 10, 20, 30, and x is 25. Find x.", correct: "40" },
-        { type: "mcq", prompt: "If f(x) = 2x - 3, what is f(f(5))?", options: ["7", "11", "14", "17"], correct: "11" },
-        { type: "qc", prompt: "Line L has the equation y = 3x - 4.<br><br><b>Quantity A:</b> Slope of a line parallel to L<br><b>Quantity B:</b> 3", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "Equal" },
-        { type: "mcq", prompt: "In a group of 50 people, 30 like pizza and 25 like burgers. 10 like both. How many like neither?", options: ["0", "5", "10", "15"], correct: "5" },
-        { type: "numeric", prompt: "What is the units digit of 3¹⁵?", correct: "7" },
-        { type: "qc", prompt: "x > 0.<br><br><b>Quantity A:</b> x + 1/x<br><b>Quantity B:</b> 2", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "Cannot determine" }
+    // --- DATA ---
+    const s1Questions = [
+        { type: "qc", prompt: "x and y are integers where x²=9 and y²=16.<br><br><b>Quantity A:</b> |x - y|<br><b>Quantity B:</b> 1", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "Cannot determine" },
+        { type: "mcq", prompt: "A shirt price drops 20%, then increases 20%. Final price is what % of original?", options: ["96%", "100%", "104%", "80%"], correct: "96%" },
+        { type: "qc", prompt: "Circle O has radius r. Square S has side 2r.<br><br><b>Quantity A:</b> Circumference of O<br><b>Quantity B:</b> Perimeter of S", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "B is greater" },
+        { type: "numeric", prompt: "If 4x - 8 = 2x + 10, find x.", correct: "9" },
+        { type: "qc", prompt: "k is a prime number, 2 < k < 10.<br><br><b>Quantity A:</b> Average of all possible k<br><b>Quantity B:</b> 5", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "A is greater" },
+        { type: "mcq", prompt: "Probability of rolling a prime number on a standard 6-sided die?", options: ["1/6", "1/3", "1/2", "2/3"], correct: "1/2" },
+        { type: "numeric", prompt: "Average of 5, 12, 18, 25, x is 15. Find x.", correct: "15" },
+        { type: "qc", prompt: "x > 0.<br><br><b>Quantity A:</b> (x+1)²<br><b>Quantity B:</b> x² + 1", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "A is greater" },
+        { type: "mcq", prompt: "A group of 60 students: 35 take Math, 30 take Science, 10 take both. How many take neither?", options: ["5", "10", "15", "20"], correct: "5" },
+        { type: "numeric", prompt: "A rectangle has perimeter 40. Max area?", correct: "100" },
+        { type: "qc", prompt: "Line L passes through (0,0) and (2,4).<br><br><b>Quantity A:</b> Slope of L<br><b>Quantity B:</b> 2", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "Equal" },
+        { type: "mcq", prompt: "Which is a factor of 2¹⁰ - 1?", options: ["2", "3", "4", "5"], correct: "3" }
     ];
 
-    const section2Hard = [
-        { type: "mcq", prompt: "At 12:00 PM, Runner A starts at 6 mph. At 12:15 PM, Runner B starts from the same spot at 8 mph. At what time does B catch A?", options: ["12:45 PM", "1:00 PM", "1:15 PM", "1:30 PM"], correct: "1:00 PM" },
-        { type: "qc", prompt: "x, y are positive integers. x/y = 3/4.<br><br><b>Quantity A:</b> (x+y)/y<br><b>Quantity B:</b> 1.75", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "Equal" },
-        { type: "numeric", prompt: "How many positive integers less than 100 are multiples of both 3 and 7?", correct: "4" },
-        { type: "mcq", prompt: "A circle is inscribed in a square with side 10. What is the area of the circle?", options: ["25π", "50π", "100π", "20π"], correct: "25π" },
-        { type: "qc", prompt: "n is an integer and n! ends in exactly two zeros.<br><br><b>Quantity A:</b> Smallest possible value of n<br><b>Quantity B:</b> 10", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "Equal" }
-        // ... System will repeat questions to fill 15 slots for logic simulation
+    const s2HardQuestions = [
+        { type: "qc", prompt: "x < 0.<br><b>Quantity A:</b> &radic;(x²)<br><b>Quantity B:</b> -x", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "Equal" },
+        { type: "mcq", prompt: "Runner A at 8mph, Runner B at 10mph. A starts 15 mins early. How many miles for B to catch up?", options: ["5", "10", "15", "20"], correct: "10" },
+        { type: "numeric", prompt: "Number of diagonals in a decagon (10 sides)?", correct: "35" },
+        { type: "qc", prompt: "x, y are positive integers. x/y = 0.6.<br><b>Quantity A:</b> (x+y)/y<br><b>Quantity B:</b> 1.6", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "Equal" },
+        { type: "mcq", prompt: "Machine A fills tank in 3 hrs, B in 6 hrs. Together?", options: ["2", "3", "4.5", "9"], correct: "2" },
+        { type: "numeric", prompt: "Units digit of 7²²?", correct: "9" },
+        { type: "qc", prompt: "Set S: {2, 4, 6, 8, 10}. Standard Deviation = s.<br>Set T: {12, 14, 16, 18, 20}. SD = t.<br><b>Quantity A:</b> s<br><b>Quantity B:</b> t", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "Equal" },
+        { type: "mcq", prompt: "Cylinder: r=3, h=4. Cone: r=3, h=4. Volume ratio Cylinder/Cone?", options: ["1:1", "2:1", "3:1", "9:1"], correct: "3:1" },
+        { type: "numeric", prompt: "How many multiples of 7 between 100 and 200?", correct: "14" },
+        { type: "qc", prompt: "x² + y² = 25. x, y are integers.<br><b>Quantity A:</b> Max value of x+y<br><b>Quantity B:</b> 7", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "B is greater" },
+        { type: "mcq", prompt: "3 people chosen from 6. How many combinations?", options: ["18", "20", "40", "120"], correct: "20" },
+        { type: "numeric", prompt: "Slope of line tangent to x²+y²=25 at (3,4)? (Enter decimal)", correct: "-0.75" },
+        { type: "qc", prompt: "n is an integer. n! ends in 1 zero.<br><b>Quantity A:</b> Max value of n<br><b>Quantity B:</b> 9", options: ["A is greater", "B is greater", "Equal", "Cannot determine"], correct: "Equal" },
+        { type: "mcq", prompt: "Average of a, b is 10. Average of b, c is 15. c - a?", options: ["5", "10", "15", "25"], correct: "10" },
+        { type: "numeric", prompt: "What is 0.5% of 4000?", correct: "20" }
     ];
 
-    // --- LOGIC ENGINE ---
-    let currentSec = 1, qIdx = 0, answers = {}, marks = new Set(), timeLeft = 1260, timer;
-    let questions = section1;
+    // --- ENGINE ---
+    let curSec = 1, qIdx = 0, answers = {}, marks = new Set(), timeLeft = 1260, timer, questions = s1Questions;
 
     function startTimer() {
         clearInterval(timer);
@@ -125,32 +122,31 @@
         document.getElementById('q-meta').innerText = `Question ${qIdx + 1} of ${questions.length}`;
         document.getElementById('q-prompt').innerHTML = q.prompt;
         const div = document.getElementById('q-inputs'); div.innerHTML = '';
-        
         if(q.type !== 'numeric') {
             q.options.forEach(o => {
                 const l = document.createElement('label'); l.className = 'option-label';
                 const r = document.createElement('input'); r.type = 'radio'; r.name = 'q'; r.value = o;
-                if(answers[`s${currentSec}_${qIdx}`] === o) r.checked = true;
-                r.onchange = () => answers[`s${currentSec}_${qIdx}`] = o;
+                if(answers[`s${curSec}_${qIdx}`] === o) r.checked = true;
+                r.onchange = () => answers[`s${curSec}_${qIdx}`] = o;
                 l.appendChild(r); l.appendChild(document.createTextNode(' ' + o));
                 div.appendChild(l);
             });
         } else {
             const i = document.createElement('input'); i.className = 'numeric-input';
-            i.value = answers[`s${currentSec}_${qIdx}`] || '';
-            i.oninput = (e) => answers[`s${currentSec}_${qIdx}`] = e.target.value;
+            i.value = answers[`s${curSec}_${qIdx}`] || '';
+            i.oninput = (e) => answers[`s${curSec}_${qIdx}`] = e.target.value;
             div.appendChild(i);
         }
-        document.getElementById('mark-btn').className = marks.has(`${currentSec}_${qIdx}`) ? 'btn-mark active' : 'btn-mark';
+        document.getElementById('mark-btn').className = marks.has(`${curSec}_${qIdx}`) ? 'active' : '';
     }
 
-    function move(d) { 
+    function move(d) {
         if(d === 1 && qIdx === questions.length - 1) showReview();
         else { qIdx = Math.max(0, Math.min(questions.length - 1, qIdx + d)); render(); }
     }
 
     function toggleMark() {
-        const key = `${currentSec}_${qIdx}`;
+        const key = `${curSec}_${qIdx}`;
         marks.has(key) ? marks.delete(key) : marks.add(key);
         render();
     }
@@ -161,9 +157,7 @@
         const list = document.getElementById('review-list'); list.innerHTML = '';
         questions.forEach((_, i) => {
             const b = document.createElement('button');
-            const answered = answers[`s${currentSec}_${i}`] ? '●' : '○';
-            const marked = marks.has(`${currentSec}_${i}`) ? '⚐' : '';
-            b.innerHTML = `Q${i+1} ${answered} ${marked}`;
+            b.innerHTML = `Q${i+1} ${answers[`s${curSec}_${i}`] ? '●' : '○'} ${marks.has(`${curSec}_${i}`) ? '⚐' : ''}`;
             b.onclick = () => { qIdx = i; closeReview(); };
             list.appendChild(b);
         });
@@ -173,7 +167,7 @@
 
     function exitSection() {
         clearInterval(timer);
-        if(currentSec === 1) {
+        if(curSec === 1) {
             document.getElementById('question-screen').style.display = 'none';
             document.getElementById('review-screen').style.display = 'none';
             document.getElementById('main-footer').style.display = 'none';
@@ -182,8 +176,7 @@
     }
 
     function startSection2() {
-        currentSec = 2; qIdx = 0; timeLeft = 1560;
-        questions = section2Hard;
+        curSec = 2; qIdx = 0; timeLeft = 1560; questions = s2HardQuestions;
         document.getElementById('transition-screen').style.display = 'none';
         document.getElementById('main-footer').style.display = 'flex';
         document.getElementById('question-screen').style.display = 'block';
@@ -196,22 +189,22 @@
         document.getElementById('question-screen').style.display = 'none';
         document.getElementById('results-screen').style.display = 'block';
         
-        let s1C = section1.filter((q, i) => answers[`s1_${i}`] === q.correct).length;
-        let s2C = section2Hard.filter((q, i) => answers[`s2_${i}`] === q.correct).length;
+        let s1C = s1Questions.filter((q, i) => answers[`s1_${i}`] === q.correct).length;
+        let s2C = s2HardQuestions.filter((q, i) => answers[`s2_${i}`] === q.correct).length;
         
-        // Scoring Algorithm
         let raw = s1C + s2C;
-        let bonus = s1C >= 8 ? 4 : 0; 
+        let bonus = s1C >= 8 ? 5 : 0; 
         let final = 130 + raw + bonus;
 
         document.getElementById('scaled-score').innerText = final;
-        document.getElementById('score-stats').innerText = `Section 1: ${s1C}/12 | Section 2: ${s2C}/5* | Bonus: +${bonus}`;
+        document.getElementById('score-stats').innerText = `Raw: ${raw}/27 | Routing: ${s1C >= 8 ? 'Hard (+5 Bonus)' : 'Medium (+0)'}`;
         
-        // Detailed feedback
         const details = document.getElementById('detailed-results');
-        section1.forEach((q, i) => {
-            const correct = answers[`s1_${i}`] === q.correct;
-            details.innerHTML += `<div class="result-card ${correct?'correct':'incorrect'}"><b>S1 Q${i+1}:</b> ${q.prompt}<br>Your Answer: ${answers[`s1_${i}`] || 'None'} | Correct: ${q.correct}</div>`;
+        [...s1Questions, ...s2HardQuestions].forEach((q, i) => {
+            const s = i < 12 ? 1 : 2;
+            const idx = i < 12 ? i : i - 12;
+            const correct = answers[`s${s}_${idx}`] === q.correct;
+            details.innerHTML += `<div class="result-card ${correct?'correct':'incorrect'}"><b>Section ${s} Q${idx+1}:</b> ${q.prompt}<br>Answer: ${answers[`s${s}_${idx}`] || 'None'} | Correct: ${q.correct}</div>`;
         });
     }
 
