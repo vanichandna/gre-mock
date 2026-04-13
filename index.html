@@ -3,442 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GRE Quant Section 1 Mock</title>
+    <title>TIXTRA | GRE Mock Exam</title>
     <style>
+        :root {
+            --primary: #00f2ff; /* Neon Cyan */
+            --bg: #0a0a0c;
+            --card-bg: #16161a;
+            --text: #e0e0e0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #d1d5db; /* GRE Gray */
-            color: #111827;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
             margin: 0;
             padding: 20px;
-            display: flex;
-            justify-content: center;
         }
+
         .container {
-            background: white;
-            width: 100%;
-            max-width: 900px;
-            border: 2px solid #9ca3af;
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            min-height: 600px;
-            position: relative;
-        }
-        .header {
-            background: #1e3a8a;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 4px solid #facc15;
-        }
-        .header h1 { margin: 0; font-size: 1.2rem; }
-        .timer { font-family: monospace; font-size: 1.4rem; font-weight: bold; background: black; color: #10b981; padding: 5px 15px; border-radius: 4px;}
-        
-        /* Top Navigation Bar */
-        .toolbar {
-            background: #e5e7eb;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid #d1d5db;
-        }
-        
-        .content {
-            padding: 40px;
-            flex-grow: 1;
-        }
-        .question-number { font-weight: bold; font-size: 1.1rem; color: #1e3a8a; margin-bottom: 20px; display: flex; justify-content: space-between;}
-        .prompt { font-size: 1.2rem; margin-bottom: 30px; line-height: 1.6; }
-        
-        /* Options */
-        .option-label {
-            display: block;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            border: 1px solid #9ca3af;
-            cursor: pointer;
-            transition: background 0.1s;
-        }
-        .option-label:hover { background: #eff6ff; border-color: #1e3a8a; }
-        .option-label input { margin-right: 15px; transform: scale(1.2); }
-        
-        .numeric-input {
-            padding: 10px;
-            font-size: 1.2rem;
-            border: 2px solid #9ca3af;
-            width: 200px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .footer {
-            background: #e5e7eb;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            border-top: 2px solid #9ca3af;
-        }
-        
-        button {
-            padding: 10px 20px;
-            font-size: 1rem;
-            border: 1px solid #4b5563;
-            cursor: pointer;
-            font-weight: bold;
-            background: #f9fafb;
-            color: #111827;
-        }
-        button:hover { background: #e5e7eb; }
-        button:disabled { opacity: 0.4; cursor: not-allowed; }
-        
-        .btn-mark { display: flex; align-items: center; gap: 5px; }
-        .marked-active { background: #fef08a !important; border-color: #ca8a04 !important; }
-        .btn-review { background: #1e3a8a; color: white; border: none; }
-        .btn-review:hover { background: #1e40af; }
-
-        /* Review Screen */
-        #review-screen, #results-screen { display: none; padding: 40px; flex-grow: 1;}
-        .review-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .review-item {
-            padding: 15px;
-            border: 1px solid #9ca3af;
-            cursor: pointer;
+        header {
             text-align: center;
-            background: #f9fafb;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
         }
-        .review-item:hover { background: #e5e7eb; }
-        .r-status { font-size: 0.8rem; color: #4b5563; margin-top: 5px;}
-        .r-marked { color: #b45309; font-weight: bold; }
-        
-        .result-item { padding: 15px; margin-bottom: 10px; border-left: 5px solid; background: #f9fafb;}
-        .correct { border-color: #10b981; }
-        .incorrect { border-color: #ef4444; }
+
+        h1 { color: var(--primary); margin-bottom: 5px; }
+
+        .question-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .options label {
+            display: block;
+            background: #232329;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .options label:hover {
+            background: #2d2d35;
+        }
+
+        input[type="radio"] {
+            margin-right: 15px;
+            accent-color: var(--primary);
+        }
+
+        button {
+            background: var(--primary);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: block;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            display: none;
+            text-align: center;
+            background: #1a2e2e;
+            border-radius: 12px;
+        }
     </style>
 </head>
 <body>
 
-<div class="container" id="app-container">
-    <div class="header">
-        <h1>GRE Section 1: Quantitative Reasoning</h1>
-        <div class="timer" id="timer">21:00</div>
-    </div>
-    
-    <div class="toolbar" id="toolbar">
-        <button class="btn-mark" id="btn-mark" onclick="toggleMark()">
-            <span id="mark-icon">☐</span> Mark for Review
-        </button>
-        <button class="btn-review" onclick="showReviewScreen()">Review Screen</button>
-    </div>
+<div class="container">
+    <header>
+        <h1>TIXTRA ACADEMY</h1>
+        <p>GRE Quantitative Reasoning - Mock Set 01</p>
+    </header>
 
-    <div class="content" id="question-screen">
-        <div class="question-number">
-            <span id="q-num">Question 1 of 12</span>
+    <form id="quizForm">
+        <div class="question-card">
+            <p><strong>1. Quantitative Comparison</strong></p>
+            <p>Quantity A: $x^2 + 1$<br>Quantity B: $2x - 1$<br><em>(x is a real number)</em></p>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A"> A is greater</label>
+                <label><input type="radio" name="q1" value="B"> B is greater</label>
+                <label><input type="radio" name="q1" value="C"> Both are equal</label>
+                <label><input type="radio" name="q1" value="D"> Relationship cannot be determined</label>
+            </div>
         </div>
-        <div class="prompt" id="q-prompt"></div>
-        <div id="q-inputs"></div>
-    </div>
 
-    <div id="review-screen">
-        <h2>Review Marked and Incomplete Questions</h2>
-        <p>Click on any question number to jump directly to that question.</p>
-        <div class="review-grid" id="review-grid"></div>
-        <div style="margin-top: 30px; text-align: right;">
-            <button class="btn-review" onclick="hideReviewScreen()">Return to Current Question</button>
-            <button style="background: #dc2626; color: white;" onclick="submitExam()">Submit Section</button>
+        <div class="question-card">
+            <p><strong>2. Arithmetic</strong></p>
+            <p>The average of five numbers is 80. If one number is removed, the average becomes 75. What number was removed?</p>
+            <div class="options">
+                <label><input type="radio" name="q2" value="80"> 80</label>
+                <label><input type="radio" name="q2" value="90"> 90</label>
+                <label><input type="radio" name="q2" value="100"> 100</label>
+                <label><input type="radio" name="q2" value="120"> 120</label>
+            </div>
         </div>
-    </div>
 
-    <div id="results-screen">
-        <h2>Section 1 Complete</h2>
-        <h3 id="final-score" style="font-size: 1.5rem; color: #1e3a8a;"></h3>
-        <p>Review your logic traps below:</p>
-        <div id="results-list"></div>
-    </div>
+        <button type="button" onclick="calculateScore()">Submit Mock Paper</button>
+    </form>
 
-    <div class="footer" id="footer">
-        <button id="btn-back" onclick="navigate(-1)">Back</button>
-        <button id="btn-next" onclick="navigate(1)">Next</button>
+    <div id="results">
+        <h2 id="scoreDisplay"></h2>
+        <p>Review the logic in your TIXTRA dashboard.</p>
     </div>
 </div>
 
 <script>
-    // --- 167+ SECTION 1 DATA (12 Questions) ---
-    const questions = [
-        {
-            type: "qc",
-            prompt: "Pipe A can fill a reservoir in exactly 5 hours. Pipe B can fill the same reservoir in exactly 7 hours.<br><br><b>Quantity A:</b> The time it takes both pipes working together to fill the reservoir<br><b>Quantity B:</b> 3 hours",
-            options: ["Quantity A is greater", "Quantity B is greater", "The two quantities are equal", "The relationship cannot be determined"],
-            correct: "Quantity B is greater",
-            logic: "1/5 + 1/7 = 12/35 combined rate. Time = 35/12 hours, which is just under 3 hours (36/12)."
-        },
-        {
-            type: "numeric",
-            prompt: "If N is the product of all positive integers from 1 to 50 inclusive (N = 50!), how many consecutive trailing zeros are at the end of the number N?",
-            correct: "12",
-            logic: "Count the 5s. 50/5 = 10. 10/5 = 2. 10 + 2 = 12."
-        },
-        {
-            type: "qc",
-            prompt: "A bag contains exactly 5 red marbles and 3 blue marbles. Two marbles are selected at random without replacement.<br><br><b>Quantity A:</b> The probability that exactly one red and exactly one blue marble are selected<br><b>Quantity B:</b> 15/28",
-            options: ["Quantity A is greater", "Quantity B is greater", "The two quantities are equal", "The relationship cannot be determined"],
-            correct: "The two quantities are equal",
-            logic: "(Red then Blue) + (Blue then Red). (5/8 * 3/7) + (3/8 * 5/7) = 15/56 + 15/56 = 30/56 = 15/28."
-        },
-        {
-            type: "qc",
-            prompt: "x < 0<br><br><b>Quantity A:</b> &radic;(x&sup2;)<br><b>Quantity B:</b> -x",
-            options: ["Quantity A is greater", "Quantity B is greater", "The two quantities are equal", "The relationship cannot be determined"],
-            correct: "The two quantities are equal",
-            logic: "The Principal Root rule: &radic;(x&sup2;) is always |x|. Since x is negative, |x| evaluates to -x."
-        },
-        {
-            type: "qc",
-            prompt: "A rectangle is perfectly inscribed inside a circle with a radius of 5.<br><br><b>Quantity A:</b> The maximum possible area of the rectangle<br><b>Quantity B:</b> 50",
-            options: ["Quantity A is greater", "Quantity B is greater", "The two quantities are equal", "The relationship cannot be determined"],
-            correct: "The two quantities are equal",
-            logic: "Max area is a square. Diagonal = diameter = 10. Area of square = d&sup2;/2 = 100/2 = 50."
-        },
-        {
-            type: "qc",
-            prompt: "Set S consists of 20 distinct integers with a standard deviation of &sigma;. A new set, Set T, is created by multiplying every integer in Set S by -2, and then adding 10 to the result.<br><br><b>Quantity A:</b> The standard deviation of Set T<br><b>Quantity B:</b> 2&sigma;",
-            options: ["Quantity A is greater", "Quantity B is greater", "The two quantities are equal", "The relationship cannot be determined"],
-            correct: "The two quantities are equal",
-            logic: "Adding 10 does nothing to SD. Multiplying by -2 scales the SD by the absolute value |-2|. SD becomes 2&sigma;."
-        },
-        {
-            type: "numeric",
-            prompt: "The function f(x) is defined for all x &ne; 1 as f(x) = (x + 1) / (x - 1). What is the value of f(f(3))?",
-            correct: "3",
-            logic: "Inside out: f(3) = (3+1)/(3-1) = 4/2 = 2. Then f(2) = (2+1)/(2-1) = 3/1 = 3."
-        },
-        {
-            type: "qc",
-            prompt: "Line K in the coordinate plane is defined by the equation 3x - 4y = -12.<br><br><b>Quantity A:</b> The x-intercept of Line K<br><b>Quantity B:</b> The y-intercept of Line K",
-            options: ["Quantity A is greater", "Quantity B is greater", "The two quantities are equal", "The relationship cannot be determined"],
-            correct: "Quantity B is greater",
-            logic: "Cover up method. x-int: 3x = -12 so x = -4. y-int: -4y = -12 so y = 3. 3 is greater than -4."
-        },
-        {
-            type: "mcq",
-            prompt: "A sequence is defined by the formula a<sub>n</sub> = a<sub>n-1</sub> - a<sub>n-2</sub> for all integers n &ge; 3. If a<sub>1</sub> = 2 and a<sub>2</sub> = 5, what is the value of a<sub>100</sub>?",
-            options: ["-5", "-3", "-2", "2", "3"],
-            correct: "-2",
-            logic: "Cycle is [2, 5, 3, -2, -5, -3]. Length is 6. 100 / 6 leaves remainder 4. The 4th term is -2."
-        },
-        {
-            type: "numeric",
-            prompt: "In a survey of 100 investors, 80 own stocks, 70 own bonds, and 60 own real estate. What is the minimum possible number of investors who own ALL THREE assets?",
-            correct: "10",
-            logic: "Maximum without rule. Lack stocks: 20. Lack bonds: 30. Lack real estate: 40. Total lacking = 90. 100 - 90 = 10 MUST have all three."
-        },
-        {
-            type: "mcq",
-            prompt: "The total area of a perfect square is given by the expression x&sup2;, where x < 0. Which of the following represents the perimeter of the square?",
-            options: ["4x", "-4x", "4|x|", "16x&sup2;", "-16x"],
-            correct: "-4x",
-            logic: "Side length = &radic;(x&sup2;) = |x|. Since x is negative, side = -x. Perimeter = 4(-x) = -4x."
-        },
-        {
-            type: "qc",
-            prompt: "When the positive integer N is divided by 5, the remainder is 3.<br><br><b>Quantity A:</b> The remainder when 2N&sup2; is divided by 5<br><b>Quantity B:</b> 3",
-            options: ["Quantity A is greater", "Quantity B is greater", "The two quantities are equal", "The relationship cannot be determined"],
-            correct: "The two quantities are equal",
-            logic: "Remainder clone. Plug in 3 for N. 2(3&sup2;) = 2(9) = 18. 18 divided by 5 leaves a remainder of 3."
-        }
-    ];
-
-    // --- STATE ---
-    let currentIndex = 0;
-    let userAnswers = {};
-    let markedQuestions = new Set();
-    let timeLeft = 1260; // 21 minutes
-    let timerInterval;
-
-    // --- DOM ELEMENTS ---
-    const qNumEl = document.getElementById('q-num');
-    const promptEl = document.getElementById('q-prompt');
-    const inputsEl = document.getElementById('q-inputs');
-    const btnBack = document.getElementById('btn-back');
-    const btnNext = document.getElementById('btn-next');
-    const btnMark = document.getElementById('btn-mark');
-    const timerEl = document.getElementById('timer');
-    const screenQ = document.getElementById('question-screen');
-    const screenReview = document.getElementById('review-screen');
-    const screenResults = document.getElementById('results-screen');
-    const toolbar = document.getElementById('toolbar');
-    const footer = document.getElementById('footer');
-
-    // --- BOOT ---
-    function startApp() {
-        renderQuestion();
-        timerInterval = setInterval(updateTimer, 1000);
-    }
-
-    // --- TIMER ---
-    function updateTimer() {
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            submitExam();
-            return;
-        }
-        timeLeft--;
-        let minutes = Math.floor(timeLeft / 60);
-        let seconds = timeLeft % 60;
-        timerEl.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        if(timeLeft < 300) timerEl.style.color = "#ef4444"; // Red at 5 mins
-    }
-
-    // --- RENDER ---
-    function renderQuestion() {
-        screenQ.style.display = 'block';
-        screenReview.style.display = 'none';
-        toolbar.style.display = 'flex';
-        footer.style.display = 'flex';
-
-        const q = questions[currentIndex];
-        qNumEl.innerText = `Question ${currentIndex + 1} of ${questions.length}`;
-        promptEl.innerHTML = q.prompt;
-        inputsEl.innerHTML = ''; 
-
-        // Inputs
-        if (q.type === 'qc' || q.type === 'mcq') {
-            q.options.forEach(opt => {
-                const label = document.createElement('label');
-                label.className = 'option-label';
-                
-                const radio = document.createElement('input');
-                radio.type = 'radio';
-                radio.name = `q${currentIndex}`;
-                radio.value = opt;
-                if (userAnswers[currentIndex] === opt) radio.checked = true;
-                
-                // Save the answer to state when clicked
-                radio.onchange = (e) => {
-                    userAnswers[currentIndex] = e.target.value;
-                };
-                
-                label.appendChild(radio);
-                label.appendChild(document.createTextNode(opt)); // THIS is the fix!
-                inputsEl.appendChild(label);
-            });
-        } else if (q.type === 'numeric') {
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.className = 'numeric-input';
-            if (userAnswers[currentIndex]) input.value = userAnswers[currentIndex];
-            input.oninput = (e) => userAnswers[currentIndex] = e.target.value;
-            inputsEl.appendChild(input);
-        }
-
-        // Mark Button State
-        if(markedQuestions.has(currentIndex)) {
-            btnMark.classList.add('marked-active');
-            document.getElementById('mark-icon').innerText = '☑';
-        } else {
-            btnMark.classList.remove('marked-active');
-            document.getElementById('mark-icon').innerText = '☐';
-        }
-
-        // Nav Buttons
-        btnBack.disabled = currentIndex === 0;
-        if (currentIndex === questions.length - 1) {
-            btnNext.innerText = "Review Screen";
-        } else {
-            btnNext.innerText = "Next";
-        }
-    }
-
-    // --- NAVIGATION & MARKING ---
-    function navigate(dir) {
-        if (dir === 1 && currentIndex === questions.length - 1) {
-            showReviewScreen();
-        } else {
-            currentIndex += dir;
-            renderQuestion();
-        }
-    }
-
-    function toggleMark() {
-        if(markedQuestions.has(currentIndex)) {
-            markedQuestions.delete(currentIndex);
-        } else {
-            markedQuestions.add(currentIndex);
-        }
-        renderQuestion(); // refresh button UI
-    }
-
-    function jumpToQuestion(index) {
-        currentIndex = index;
-        renderQuestion();
-    }
-
-    // --- REVIEW SCREEN ---
-    function showReviewScreen() {
-        screenQ.style.display = 'none';
-        toolbar.style.display = 'none';
-        footer.style.display = 'none';
-        screenReview.style.display = 'block';
-
-        const grid = document.getElementById('review-grid');
-        grid.innerHTML = '';
-
-        questions.forEach((q, index) => {
-            const item = document.createElement('div');
-            item.className = 'review-item';
-            item.onclick = () => jumpToQuestion(index);
-            
-            const isMarked = markedQuestions.has(index);
-            const isAnswered = userAnswers[index] && userAnswers[index].trim() !== "";
-            
-            item.innerHTML = `
-                <b>Question ${index + 1}</b>
-                <div class="r-status">${isAnswered ? 'Answered' : 'Not Answered'}</div>
-                ${isMarked ? '<div class="r-marked">⚐ Marked</div>' : ''}
-            `;
-            grid.appendChild(item);
-        });
-    }
-
-    function hideReviewScreen() {
-        renderQuestion();
-    }
-
-    // --- GRADING ---
-    function submitExam() {
-        clearInterval(timerInterval);
-        screenReview.style.display = 'none';
-        screenResults.style.display = 'block';
-        toolbar.style.display = 'none';
-        footer.style.display = 'none';
-
+    function calculateScore() {
         let score = 0;
-        const listEl = document.getElementById('results-list');
+        const answers = { q1: "A", q2: "100" };
+        const form = document.getElementById('quizForm');
+        
+        if(form.q1.value === answers.q1) score++;
+        if(form.q2.value === answers.q2) score++;
 
-        questions.forEach((q, index) => {
-            const userAnswer = userAnswers[index] || "None";
-            const isCorrect = userAnswer === q.correct;
-            if (isCorrect) score++;
-
-            const div = document.createElement('div');
-            div.className = `result-item ${isCorrect ? 'correct' : 'incorrect'}`;
-            div.innerHTML = `
-                <b>Q${index + 1}: ${isCorrect ? 'Correct' : 'Incorrect'}</b><br>
-                <span style="color:#4b5563; font-size:0.9em;">Your Answer: ${userAnswer} | Correct: ${q.correct}</span>
-                ${!isCorrect ? `<div style="margin-top: 8px; font-size: 0.9em; color: #1e3a8a; background: #eff6ff; padding: 5px;"><b>Logic Pivot:</b> ${q.logic}</div>` : ''}
-            `;
-            listEl.appendChild(div);
-        });
-
-        document.getElementById('final-score').innerText = `Final Score: ${score} / 12`;
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('scoreDisplay').innerText = `Your Score: ${score} / 2`;
+        window.scrollTo(0, document.body.scrollHeight);
     }
-
-    startApp();
 </script>
+
 </body>
 </html>
